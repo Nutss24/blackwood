@@ -49,6 +49,9 @@
       width: 60px;
       padding: 5px;
     }
+    .cart-item span {
+      width: 100px;
+    }
     .submit-btn {
       background-color: #007bff;
       color: white;
@@ -61,6 +64,11 @@
     }
     .submit-btn:hover {
       background-color: #0056b3;
+    }
+    .total-price {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -84,6 +92,7 @@
     <div class="cart">
       <h3>Votre sélection</h3>
       <div id="cartList"></div>
+      <div class="total-price" id="totalPrice">Total : €0.00</div>
       <button class="submit-btn" onclick="submitOrder()">Enregistrer la commande</button>
     </div>
   </div>
@@ -115,24 +124,34 @@
       const cartList = document.getElementById('cartList');
       cartList.innerHTML = '';  // Réinitialiser la liste des articles dans le panier
 
+      let total = 0;
+
       cart.forEach((product, index) => {
+        const totalPerProduct = product.price * product.quantity;
+        total += totalPerProduct;
+
         const cartItem = document.createElement('div');
         cartItem.classList.add('cart-item');
         
         cartItem.innerHTML = `
           <span>${product.name} - €${product.price}</span>
           <input type="number" value="${product.quantity}" min="1" data-index="${index}" class="quantity-input">
+          <span>Total : €${totalPerProduct.toFixed(2)}</span>
           <button onclick="removeFromCart(${index})">Supprimer</button>
         `;
         
         cartList.appendChild(cartItem);
       });
 
+      // Mettre à jour le total de la commande
+      document.getElementById('totalPrice').textContent = `Total : €${total.toFixed(2)}`;
+
       // Ajouter un gestionnaire pour les champs de quantité
       document.querySelectorAll('.quantity-input').forEach(input => {
         input.addEventListener('change', function() {
           const index = this.getAttribute('data-index');
           cart[index].quantity = parseInt(this.value);
+          updateCart();  // Recalculer et mettre à jour le panier
         });
       });
     }
