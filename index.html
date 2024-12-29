@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saisie des ventes - Bar RP</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+    .form-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .form-container h2 {
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .submit-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .submit-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Saisie des ventes</h2>
+    <form id="salesForm">
+      <div class="form-group">
+        <label for="employe">Employé</label>
+        <input type="text" id="employe" name="employe" required>
+      </div>
+      <div class="form-group">
+        <label for="produit">Produit</label>
+        <select id="produit" name="produit" required>
+          <option value="Bière">Bière</option>
+          <option value="Vodka">Vodka</option>
+          <option value="Whisky">Whisky</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="quantite">Quantité</label>
+        <input type="number" id="quantite" name="quantite" required min="1">
+      </div>
+      <div class="form-group">
+        <label for="prixUnitaire">Prix Unitaire (€)</label>
+        <input type="number" id="prixUnitaire" name="prixUnitaire" required min="1">
+      </div>
+      <button type="submit" class="submit-btn">Enregistrer</button>
+    </form>
+    <div id="responseMessage" style="margin-top: 15px;"></div>
+  </div>
+
+  <script>
+    document.getElementById('salesForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Empêche le rechargement de la page
+
+      // Récupérer les données du formulaire
+      var employe = document.getElementById('employe').value;
+      var produit = document.getElementById('produit').value;
+      var quantite = document.getElementById('quantite').value;
+      var prixUnitaire = document.getElementById('prixUnitaire').value;
+
+      // Créer l'objet de données à envoyer
+      var salesData = {
+        employe: employe,
+        produit: produit,
+        quantite: quantite,
+        prixUnitaire: prixUnitaire
+      };
+
+      // Envoyer les données via une requête POST au script Google Apps
+      fetch('https://script.google.com/macros/s/TON_DEPLOYED_SCRIPT_URL/exec', {
+        method: 'POST',
+        body: JSON.stringify(salesData),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.text())
+      .then(data => {
+        // Afficher le message de succès
+        document.getElementById('responseMessage').textContent = data;
+      })
+      .catch(error => {
+        console.error('Erreur:', error);
+        document.getElementById('responseMessage').textContent = 'Une erreur est survenue.';
+      });
+    });
+  </script>
+
+</body>
+</html>
