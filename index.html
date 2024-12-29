@@ -10,131 +10,158 @@
       background-color: #f0f0f0;
       padding: 20px;
     }
-    .form-container {
+    .container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .products {
+      width: 45%;
       background-color: white;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-      margin: 0 auto;
     }
-    .form-container h2 {
-      text-align: center;
+    .cart {
+      width: 45%;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-    }
-    .form-group input, .form-group select {
-      width: 100%;
+    .product-item {
+      background-color: #28a745;
+      color: white;
       padding: 10px;
-      border: 1px solid #ccc;
+      margin: 10px;
+      text-align: center;
       border-radius: 4px;
+      cursor: pointer;
+    }
+    .product-item:hover {
+      background-color: #218838;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .cart-item input {
+      width: 60px;
+      padding: 5px;
     }
     .submit-btn {
-      background-color: #28a745;
+      background-color: #007bff;
       color: white;
       padding: 10px 15px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       width: 100%;
+      margin-top: 20px;
     }
     .submit-btn:hover {
-      background-color: #218838;
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
 
-  <div class="form-container">
-    <h2>Saisie des ventes</h2>
-    <form id="salesForm">
-      <div class="form-group">
-        <label for="employe">Employé</label>
-        <input type="text" id="employe" name="employe" required>
+  <h1>Saisie des ventes - Bar RP</h1>
+
+  <div class="container">
+    <!-- Liste des produits -->
+    <div class="products">
+      <h3>Produits disponibles</h3>
+      <div id="productList">
+        <div class="product-item" data-name="Bière" data-price="5">Bière</div>
+        <div class="product-item" data-name="Vodka" data-price="7">Vodka</div>
+        <div class="product-item" data-name="Whisky" data-price="10">Whisky</div>
+        <!-- Ajoute ici d'autres produits si nécessaire -->
       </div>
-      <div class="form-group">
-        <label for="produit">Produit</label>
-        <select id="produit" name="produit" required>
-          <option value="Bière">Bière</option>
-          <option value="Vodka">Vodka</option>
-          <option value="Whisky">Whisky</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="quantite">Quantité</label>
-        <input type="number" id="quantite" name="quantite" required min="1">
-      </div>
-      <div class="form-group">
-        <label for="prixUnitaire">Prix Unitaire (€)</label>
-        <input type="number" id="prixUnitaire" name="prixUnitaire" required min="1" readonly>
-      </div>
-      <button type="submit" class="submit-btn">Enregistrer</button>
-    </form>
-    <div id="responseMessage" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- Panier (articles sélectionnés) -->
+    <div class="cart">
+      <h3>Votre sélection</h3>
+      <div id="cartList"></div>
+      <button class="submit-btn" onclick="submitOrder()">Enregistrer la commande</button>
+    </div>
   </div>
 
   <script>
-    // Table de prix des produits
-    const prixProduits = {
-      "Bière": 5,      // prix en euros
-      "Vodka": 7,
-      "Whisky": 10
-    };
+    let cart = [];
 
-    // Remplir le prix unitaire en fonction du produit sélectionné
-    document.getElementById('produit').addEventListener('change', function() {
-      const produit = this.value;
-      const prixUnitaire = prixProduits[produit];
-      document.getElementById('prixUnitaire').value = prixUnitaire;
-    });
-
-    // Initialiser le prixUnitaire lors du chargement initial de la page
-    document.addEventListener('DOMContentLoaded', function() {
-      const produit = document.getElementById('produit').value;
-      document.getElementById('prixUnitaire').value = prixProduits[produit];
-    });
-
-    // Gérer la soumission du formulaire
-    document.getElementById('salesForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Empêche le rechargement de la page
-
-      // Récupérer les données du formulaire
-      var employe = document.getElementById('employe').value;
-      var produit = document.getElementById('produit').value;
-      var quantite = document.getElementById('quantite').value;
-      var prixUnitaire = document.getElementById('prixUnitaire').value;
-
-      // Créer l'objet de données à envoyer
-      var salesData = {
-        employe: employe,
-        produit: produit,
-        quantite: quantite,
-        prixUnitaire: prixUnitaire
-      };
-
-      // Envoyer les données via une requête POST au script Google Apps
-      fetch('https://script.google.com/macros/s/TON_DEPLOYED_SCRIPT_URL/exec', {
-        method: 'POST',
-        body: JSON.stringify(salesData),
-        headers: {
-          'Content-Type': 'application/json'
+    // Fonction pour ajouter un produit au panier
+    document.querySelectorAll('.product-item').forEach(item => {
+      item.addEventListener('click', function() {
+        const productName = this.getAttribute('data-name');
+        const productPrice = parseFloat(this.getAttribute('data-price'));
+        
+        // Ajouter le produit à la liste du panier (si déjà présent, on augmente la quantité)
+        let productInCart = cart.find(product => product.name === productName);
+        
+        if (productInCart) {
+          productInCart.quantity += 1;  // Augmenter la quantité si déjà dans le panier
+        } else {
+          cart.push({ name: productName, price: productPrice, quantity: 1 });
         }
-      })
-      .then(response => response.text())
-      .then(data => {
-        // Afficher le message de succès
-        document.getElementById('responseMessage').textContent = data;
-      })
-      .catch(error => {
-        console.error('Erreur:', error);
-        document.getElementById('responseMessage').textContent = 'Une erreur est survenue.';
+
+        updateCart();
       });
     });
+
+    // Mettre à jour l'affichage du panier
+    function updateCart() {
+      const cartList = document.getElementById('cartList');
+      cartList.innerHTML = '';  // Réinitialiser la liste des articles dans le panier
+
+      cart.forEach((product, index) => {
+        const cartItem = document.createElement('div');
+        cartItem.classList.add('cart-item');
+        
+        cartItem.innerHTML = `
+          <span>${product.name} - €${product.price}</span>
+          <input type="number" value="${product.quantity}" min="1" data-index="${index}" class="quantity-input">
+          <button onclick="removeFromCart(${index})">Supprimer</button>
+        `;
+        
+        cartList.appendChild(cartItem);
+      });
+
+      // Ajouter un gestionnaire pour les champs de quantité
+      document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', function() {
+          const index = this.getAttribute('data-index');
+          cart[index].quantity = parseInt(this.value);
+        });
+      });
+    }
+
+    // Supprimer un produit du panier
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    // Soumettre la commande (envoie les données au serveur ou Google Sheets)
+    function submitOrder() {
+      const orderData = cart.map(product => ({
+        name: product.name,
+        quantity: product.quantity,
+        price: product.price
+      }));
+
+      // Afficher les données dans la console pour l'instant
+      console.log("Commande enregistrée :", orderData);
+
+      // Envoi des données vers un Google Script ou API (remplacer par ton API)
+      // Exemple :
+      // fetch('URL_DE_TON_API', {
+      //   method: 'POST',
+      //   body: JSON.stringify(orderData),
+      //   headers: { 'Content-Type': 'application/json' }
+      // }).then(response => response.json()).then(data => console.log(data));
+    }
   </script>
 
 </body>
