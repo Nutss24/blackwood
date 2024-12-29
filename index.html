@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
+      background-color: #f4f1e1;  /* Beige clair */
       padding: 20px;
     }
     .container {
@@ -16,7 +16,7 @@
     }
     .products {
       width: 45%;
-      background-color: white;
+      background-color: #fff8f1;  /* Beige clair */
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -24,22 +24,24 @@
       flex-wrap: wrap;
     }
     .product-item {
-      background-color: #28a745;
+      background-color: #a57c58;  /* Bois brun */
       color: white;
       padding: 10px;
       margin: 10px;
       text-align: center;
-      border-radius: 4px;
+      border-radius: 8px;
       cursor: pointer;
       width: 120px;
       box-sizing: border-box;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
     }
     .product-item img {
       width: 100%;
       border-radius: 4px;
     }
     .product-item:hover {
-      background-color: #218838;
+      background-color: #7e5a3d;  /* Un ton un peu plus foncé du bois */
     }
     .product-item span {
       display: block;
@@ -48,7 +50,7 @@
     }
     .cart {
       width: 45%;
-      background-color: white;
+      background-color: #fff8f1;  /* Beige clair */
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -61,12 +63,14 @@
     .cart-item input {
       width: 60px;
       padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #a57c58;  /* Bordure bois */
     }
     .cart-item span {
       width: 100px;
     }
     .submit-btn {
-      background-color: #007bff;
+      background-color: #7e5a3d;  /* Bois brun */
       color: white;
       padding: 10px 15px;
       border: none;
@@ -74,31 +78,44 @@
       cursor: pointer;
       width: 100%;
       margin-top: 20px;
+      transition: background-color 0.3s ease;
     }
     .submit-btn:hover {
-      background-color: #0056b3;
+      background-color: #5f3f2d;  /* Un ton plus foncé pour l'effet de survol */
     }
     .total-price {
       font-size: 18px;
       font-weight: bold;
       margin-top: 20px;
+      color: #7e5a3d;  /* Bois brun pour le total */
     }
     .employee-selection {
       margin-bottom: 20px;
+    }
+    select, label {
+      font-size: 16px;
+      padding: 5px;
+      margin-top: 10px;
+    }
+    select {
+      background-color: #f4f1e1;  /* Beige clair */
+      border: 1px solid #a57c58;  /* Bordure bois */
+      border-radius: 4px;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Compta BlackWood</h1>
+  <h1 style="color: #7e5a3d;">Saisie des ventes - Bar RP</h1>
 
   <!-- Sélection de l'employé -->
   <div class="employee-selection">
     <label for="employeeSelect">Choisissez l'employé :</label>
     <select id="employeeSelect">
-      <option value="employe1">Ava</option>
-      <option value="employe2">Elly Caldin</option>
-      <option value="employe3">Billy Williams</option>
+      <option value="employe1">Employé 1</option>
+      <option value="employe2">Employé 2</option>
+      <option value="employe3">Employé 3</option>
       <!-- Ajoute plus d'employés ici si nécessaire -->
     </select>
   </div>
@@ -106,9 +123,9 @@
   <div class="container">
     <!-- Liste des produits avec images -->
     <div class="products">
-      <h3>Produits disponibles</h3>
-      <div class="product-item" data-name="North Tourtel" data-price="5">
-        <img src="https://i.postimg.cc/tgxcn3p5/image-2024-12-29-044854597.png" alt="Bière">
+      <h3 style="color: #7e5a3d;">Produits disponibles</h3>
+      <div class="product-item" data-name="Bière" data-price="5">
+        <img src="https://via.placeholder.com/100x100.png?text=Bière" alt="Bière">
         <span>€5.00</span>
       </div>
       <div class="product-item" data-name="Vodka" data-price="7">
@@ -124,7 +141,7 @@
 
     <!-- Panier (articles sélectionnés) -->
     <div class="cart">
-      <h3>Votre sélection</h3>
+      <h3 style="color: #7e5a3d;">Votre sélection</h3>
       <div id="cartList"></div>
       <div class="total-price" id="totalPrice">Total : €0.00</div>
       <button class="submit-btn" onclick="submitOrder()">Enregistrer la commande</button>
@@ -223,4 +240,3 @@
 
 </body>
 </html>
-Changements apportés :
