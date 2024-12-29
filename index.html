@@ -231,4 +231,42 @@
       document.getElementById('totalPrice').textContent = `Total : $${total.toFixed(2)}`;
 
       // Ajouter un gestionnaire pour les champs de quantité
-      document.querySelectorAll('.quantity-input
+      document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', function() {
+          const index = this.getAttribute('data-index');
+          cart[index].quantity = parseInt(this.value);
+          updateCart();
+        });
+      });
+    }
+
+    // Fonction pour supprimer un produit du panier
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    // Fonction pour ajouter un nouvel employé à la liste
+    function addEmployee() {
+      const newEmployeeName = document.getElementById('newEmployeeName').value;
+      if (newEmployeeName) {
+        const employeeSelect = document.getElementById('employeeSelect');
+        const newOption = document.createElement('option');
+        newOption.value = newEmployeeName;
+        newOption.textContent = newEmployeeName;
+        employeeSelect.appendChild(newOption);
+
+        // Effacer le champ de texte après l'ajout
+        document.getElementById('newEmployeeName').value = '';
+      }
+    }
+
+    // Fonction pour soumettre la commande
+    function submitOrder() {
+      const selectedEmployee = document.getElementById('employeeSelect').value;
+      alert(`Commande enregistrée pour ${selectedEmployee} avec un total de $${document.getElementById('totalPrice').textContent.split(' ')[1]}.`);
+    }
+  </script>
+
+</body>
+</html>
