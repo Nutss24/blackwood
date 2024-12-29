@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blackwoods</title>
+  <title>Blackwoods employés</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -103,38 +103,71 @@
       border-radius: 4px;
       padding: 10px;
     }
+    .add-employee {
+      display: flex;
+      margin-top: 10px;
+    }
+    .add-employee input {
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #a57c58;  /* Bordure bois */
+      margin-right: 10px;
+    }
+    .add-employee button {
+      background-color: #7e5a3d;  /* Bois brun */
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .add-employee button:hover {
+      background-color: #5f3f2d;  /* Un ton plus foncé pour l'effet de survol */
+    }
   </style>
 </head>
 <body>
 
-  <h1 style="color: #7e5a3d;">Saisie des ventes - Bar RP</h1>
+  <!-- Logo du bar -->
+  <div style="text-align: center;">
+    <img src="https://via.placeholder.com/200x100.png?text=Logo+du+Bar" alt="Logo du bar">
+  </div>
 
-  <!-- Sélection de l'employé -->
+  <h1 style="color: #7e5a3d; text-align: center;">Blackwoods employés</h1>
+
+  <!-- Sélection de l'employé avec possibilité d'ajouter un nouvel employé -->
   <div class="employee-selection">
     <label for="employeeSelect">Choisissez l'employé :</label>
     <select id="employeeSelect">
-      <option value="employe1">Ava Smith</option>
-      <option value="employe2">Elly Caldin</option>
-      <option value="employe3">Billy Williams</option>
+      <option value="employe1">Employé 1</option>
+      <option value="employe2">Employé 2</option>
+      <option value="employe3">Employé 3</option>
       <!-- Ajoute plus d'employés ici si nécessaire -->
     </select>
+
+    <!-- Ajouter un nouvel employé -->
+    <div class="add-employee">
+      <input type="text" id="newEmployeeName" placeholder="Nom de l'employé">
+      <button onclick="addEmployee()">Ajouter</button>
+    </div>
   </div>
 
   <div class="container">
     <!-- Liste des produits avec images -->
     <div class="products">
       <h3 style="color: #7e5a3d;">Produits disponibles</h3>
-      <div class="product-item" data-name="North Tourtel" data-price="5">
-        <img src="https://i.postimg.cc/tgxcn3p5/image-2024-12-29-044854597.png" alt="Bière">
-        <span>€5.00</span>
+      <div class="product-item" data-name="Bière" data-price="5">
+        <img src="https://via.placeholder.com/100x100.png?text=Bière" alt="Bière">
+        <span>$5.00</span>
       </div>
       <div class="product-item" data-name="Vodka" data-price="7">
         <img src="https://via.placeholder.com/100x100.png?text=Vodka" alt="Vodka">
-        <span>€7.00</span>
+        <span>$7.00</span>
       </div>
       <div class="product-item" data-name="Whisky" data-price="10">
         <img src="https://via.placeholder.com/100x100.png?text=Whisky" alt="Whisky">
-        <span>€10.00</span>
+        <span>$10.00</span>
       </div>
       <!-- Ajoute ici d'autres produits si nécessaire -->
     </div>
@@ -185,9 +218,9 @@
         cartItem.classList.add('cart-item');
         
         cartItem.innerHTML = `
-          <span>${product.name} - €${product.price}</span>
+          <span>${product.name} - $${product.price}</span>
           <input type="number" value="${product.quantity}" min="1" data-index="${index}" class="quantity-input">
-          <span>Total : €${totalPerProduct.toFixed(2)}</span>
+          <span>Total : $${totalPerProduct.toFixed(2)}</span>
           <button onclick="removeFromCart(${index})">Supprimer</button>
         `;
         
@@ -195,48 +228,7 @@
       });
 
       // Mettre à jour le total de la commande
-      document.getElementById('totalPrice').textContent = `Total : €${total.toFixed(2)}`;
+      document.getElementById('totalPrice').textContent = `Total : $${total.toFixed(2)}`;
 
       // Ajouter un gestionnaire pour les champs de quantité
-      document.querySelectorAll('.quantity-input').forEach(input => {
-        input.addEventListener('change', function() {
-          const index = this.getAttribute('data-index');
-          cart[index].quantity = parseInt(this.value);
-          updateCart();  // Recalculer et mettre à jour le panier
-        });
-      });
-    }
-
-    // Supprimer un produit du panier
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      updateCart();
-    }
-
-    // Soumettre la commande (envoie les données au serveur ou Google Sheets)
-    function submitOrder() {
-      const employee = document.getElementById('employeeSelect').value;  // Récupérer l'employé sélectionné
-      const orderData = {
-        employee: employee,
-        items: cart.map(product => ({
-          name: product.name,
-          quantity: product.quantity,
-          price: product.price
-        }))
-      };
-
-      // Afficher les données dans la console pour l'instant
-      console.log("Commande enregistrée pour l'employé", employee, orderData);
-
-      // Envoi des données vers un Google Script ou API (remplacer par ton API)
-      // Exemple :
-      // fetch('URL_DE_TON_API', {
-      //   method: 'POST',
-      //   body: JSON.stringify(orderData),
-      //   headers: { 'Content-Type': 'application/json' }
-      // }).then(response => response.json()).then(data => console.log(data));
-    }
-  </script>
-
-</body>
-</html>
+      document.querySelectorAll('.quantity-input
