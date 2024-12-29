@@ -20,13 +20,8 @@
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    .cart {
-      width: 45%;
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-wrap: wrap;
     }
     .product-item {
       background-color: #28a745;
@@ -36,9 +31,27 @@
       text-align: center;
       border-radius: 4px;
       cursor: pointer;
+      width: 120px;
+      box-sizing: border-box;
+    }
+    .product-item img {
+      width: 100%;
+      border-radius: 4px;
     }
     .product-item:hover {
       background-color: #218838;
+    }
+    .product-item span {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .cart {
+      width: 45%;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
     .cart-item {
       display: flex;
@@ -91,15 +104,22 @@
   </div>
 
   <div class="container">
-    <!-- Liste des produits -->
+    <!-- Liste des produits avec images -->
     <div class="products">
       <h3>Produits disponibles</h3>
-      <div id="productList">
-        <div class="product-item" data-name="Bière" data-price="5">Bière</div>
-        <div class="product-item" data-name="Vodka" data-price="7">Vodka</div>
-        <div class="product-item" data-name="Whisky" data-price="10">Whisky</div>
-        <!-- Ajoute ici d'autres produits si nécessaire -->
+      <div class="product-item" data-name="Bière" data-price="5">
+        <img src="https://via.placeholder.com/100x100.png?text=Bière" alt="Bière">
+        <span>€5.00</span>
       </div>
+      <div class="product-item" data-name="Vodka" data-price="7">
+        <img src="https://via.placeholder.com/100x100.png?text=Vodka" alt="Vodka">
+        <span>€7.00</span>
+      </div>
+      <div class="product-item" data-name="Whisky" data-price="10">
+        <img src="https://via.placeholder.com/100x100.png?text=Whisky" alt="Whisky">
+        <span>€10.00</span>
+      </div>
+      <!-- Ajoute ici d'autres produits si nécessaire -->
     </div>
 
     <!-- Panier (articles sélectionnés) -->
@@ -203,3 +223,4 @@
 
 </body>
 </html>
+Changements apportés :
