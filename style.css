@@ -24,18 +24,21 @@ main {
     margin: 20px auto;
 }
 
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
 .product {
-    display: inline-block;
-    width: 100px;
-    margin-right: 20px;
+    width: calc(33% - 10px); /* Réduit la largeur pour 3 produits par ligne avec 10px de marge */
     margin-bottom: 20px;
     text-align: center;
 }
 
 .product img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
+    width: 100%;
+    height: auto;
     cursor: pointer;
 }
 
