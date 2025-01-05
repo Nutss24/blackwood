@@ -1,272 +1,37 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blackwoods employés</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f1e1;  /* Beige clair */
-      padding: 20px;
-    }
-    .container {
-      display: flex;
-      justify-content: space-between;
-    }
-    .products {
-      width: 45%;
-      background-color: #fff8f1;  /* Beige clair */
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-wrap: wrap;
-    }
-    .product-item {
-      background-color: #a57c58;  /* Bois brun */
-      color: white;
-      padding: 10px;
-      margin: 10px;
-      text-align: center;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 120px;
-      box-sizing: border-box;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s ease;
-    }
-    .product-item img {
-      width: 100%;
-      border-radius: 4px;
-    }
-    .product-item:hover {
-      background-color: #7e5a3d;  /* Un ton un peu plus foncé du bois */
-    }
-    .product-item span {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    .cart {
-      width: 45%;
-      background-color: #fff8f1;  /* Beige clair */
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    .cart-item input {
-      width: 60px;
-      padding: 5px;
-      border-radius: 4px;
-      border: 1px solid #a57c58;  /* Bordure bois */
-    }
-    .cart-item span {
-      width: 100px;
-    }
-    .submit-btn {
-      background-color: #7e5a3d;  /* Bois brun */
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 20px;
-      transition: background-color 0.3s ease;
-    }
-    .submit-btn:hover {
-      background-color: #5f3f2d;  /* Un ton plus foncé pour l'effet de survol */
-    }
-    .total-price {
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 20px;
-      color: #7e5a3d;  /* Bois brun pour le total */
-    }
-    .employee-selection {
-      margin-bottom: 20px;
-    }
-    select, label {
-      font-size: 16px;
-      padding: 5px;
-      margin-top: 10px;
-    }
-    select {
-      background-color: #f4f1e1;  /* Beige clair */
-      border: 1px solid #a57c58;  /* Bordure bois */
-      border-radius: 4px;
-      padding: 10px;
-    }
-    .add-employee {
-      display: flex;
-      margin-top: 10px;
-    }
-    .add-employee input {
-      padding: 5px;
-      border-radius: 4px;
-      border: 1px solid #a57c58;  /* Bordure bois */
-      margin-right: 10px;
-    }
-    .add-employee button {
-      background-color: #7e5a3d;  /* Bois brun */
-      color: white;
-      padding: 5px 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .add-employee button:hover {
-      background-color: #5f3f2d;  /* Un ton plus foncé pour l'effet de survol */
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paleto Bar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .product {
+            margin-bottom: 10px;
+        }
+        .product button {
+            margin-left: 10px;
+        }
+        #cart {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
-
-  <!-- Logo du bar -->
-  <div style="text-align: center;">
-    <img src="https://via.placeholder.com/200x100.png?text=Logo+du+Bar" alt="Logo du bar">
-  </div>
-
-  <h1 style="color: #7e5a3d; text-align: center;">Blackwoods employés</h1>
-
-  <!-- Sélection de l'employé avec possibilité d'ajouter un nouvel employé -->
-  <div class="employee-selection">
-    <label for="employeeSelect">Choisissez l'employé :</label>
-    <select id="employeeSelect">
-      <option value="employe1">Employé 1</option>
-      <option value="employe2">Employé 2</option>
-      <option value="employe3">Employé 3</option>
-      <!-- Ajoute plus d'employés ici si nécessaire -->
-    </select>
-
-    <!-- Ajouter un nouvel employé -->
-    <div class="add-employee">
-      <input type="text" id="newEmployeeName" placeholder="Nom de l'employé">
-      <button onclick="addEmployee()">Ajouter</button>
-    </div>
-  </div>
-
-  <div class="container">
-    <!-- Liste des produits avec images -->
-    <div class="products">
-      <h3 style="color: #7e5a3d;">Produits disponibles</h3>
-      <div class="product-item" data-name="Bière" data-price="5">
-        <img src="https://via.placeholder.com/100x100.png?text=Bière" alt="Bière">
-        <span>$5.00</span>
-      </div>
-      <div class="product-item" data-name="Vodka" data-price="7">
-        <img src="https://via.placeholder.com/100x100.png?text=Vodka" alt="Vodka">
-        <span>$7.00</span>
-      </div>
-      <div class="product-item" data-name="Whisky" data-price="10">
-        <img src="https://via.placeholder.com/100x100.png?text=Whisky" alt="Whisky">
-        <span>$10.00</span>
-      </div>
-      <!-- Ajoute ici d'autres produits si nécessaire -->
+    <h1>Paleto Bar - Produits</h1>
+    <div id="products">Chargement des produits...</div>
+    <div id="cart">
+        <h2>Panier</h2>
+        <div id="cartItems"></div>
+        <p><strong>Total : $<span id="total">0</span></strong></p>
+        <button id="saveOrder">Enregistrer la commande</button>
     </div>
 
-    <!-- Panier (articles sélectionnés) -->
-    <div class="cart">
-      <h3 style="color: #7e5a3d;">Votre sélection</h3>
-      <div id="cartList"></div>
-      <div class="total-price" id="totalPrice">Total : $0.00</div>
-      <button class="submit-btn" onclick="submitOrder()">Enregistrer la commande</button>
-    </div>
-  </div>
-
-  <script>
-    let cart = [];
-
-    // Fonction pour ajouter un produit au panier
-    document.querySelectorAll('.product-item').forEach(item => {
-      item.addEventListener('click', function() {
-        const productName = this.getAttribute('data-name');
-        const productPrice = parseFloat(this.getAttribute('data-price'));
-        
-        // Ajouter le produit à la liste du panier (si déjà présent, on augmente la quantité)
-        let productInCart = cart.find(product => product.name === productName);
-        
-        if (productInCart) {
-          productInCart.quantity += 1;  // Augmenter la quantité si déjà dans le panier
-        } else {
-          cart.push({ name: productName, price: productPrice, quantity: 1 });
-        }
-
-        updateCart();
-      });
-    });
-
-    // Mettre à jour l'affichage du panier
-    function updateCart() {
-      const cartList = document.getElementById('cartList');
-      cartList.innerHTML = '';  // Réinitialiser la liste des articles dans le panier
-
-      let total = 0;
-
-      cart.forEach((product, index) => {
-        const totalPerProduct = product.price * product.quantity;
-        total += totalPerProduct;
-
-        const cartItem = document.createElement('div');
-        cartItem.classList.add('cart-item');
-        
-        cartItem.innerHTML = `
-          <span>${product.name} - $${product.price}</span>
-          <input type="number" value="${product.quantity}" min="1" data-index="${index}" class="quantity-input">
-          <span>Total : $${totalPerProduct.toFixed(2)}</span>
-          <button onclick="removeFromCart(${index})">Supprimer</button>
-        `;
-        
-        cartList.appendChild(cartItem);
-      });
-
-      // Mettre à jour le total de la commande
-      document.getElementById('totalPrice').textContent = `Total : $${total.toFixed(2)}`;
-
-      // Ajouter un gestionnaire pour les champs de quantité
-      document.querySelectorAll('.quantity-input').forEach(input => {
-        input.addEventListener('change', function() {
-          const index = this.getAttribute('data-index');
-          cart[index].quantity = parseInt(this.value);
-          updateCart();
-        });
-      });
-    }
-
-    // Fonction pour supprimer un produit du panier
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      updateCart();
-    }
-
-    // Fonction pour ajouter un nouvel employé à la liste
-    function addEmployee() {
-      const newEmployeeName = document.getElementById('newEmployeeName').value;
-      if (newEmployeeName) {
-        const employeeSelect = document.getElementById('employeeSelect');
-        const newOption = document.createElement('option');
-        newOption.value = newEmployeeName;
-        newOption.textContent = newEmployeeName;
-        employeeSelect.appendChild(newOption);
-
-        // Effacer le champ de texte après l'ajout
-        document.getElementById('newEmployeeName').value = '';
-      }
-    }
-
-    // Fonction pour soumettre la commande
-    function submitOrder() {
-      const selectedEmployee = document.getElementById('employeeSelect').value;
-      alert(`Commande enregistrée pour ${selectedEmployee} avec un total de $${document.getElementById('totalPrice').textContent.split(' ')[1]}.`);
-    }
-  </script>
-
+    <script src="app.js"></script>
 </body>
 </html>
