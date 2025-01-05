@@ -36,17 +36,10 @@
         .product-card img {
             max-width: 100%;
             border-radius: 8px;
-        }
-        .product-card h3 {
-            margin: 10px 0;
-        }
-        .product-card button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
             cursor: pointer;
+        }
+        .product-card p {
+            margin: 10px 0;
         }
         .cart {
             flex: 1;
@@ -68,6 +61,18 @@
         .cart-item img {
             max-width: 50px;
             margin-right: 10px;
+        }
+        .cart-item span {
+            font-size: 14px;
+        }
+        .cart-item .quantity {
+            display: flex;
+            align-items: center;
+        }
+        .cart-item .quantity input {
+            width: 30px;
+            text-align: center;
+            margin-left: 5px;
         }
         .total {
             margin-top: 20px;
@@ -111,9 +116,8 @@
                 const productCard = document.createElement('div');
                 productCard.className = 'product-card';
                 productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
+                    <img src="${product.image}" alt="${product.name}" onclick="addToCart(${product.id})">
                     <p>Prix : $${product.price}</p>
-                    <button onclick="addToCart(${product.id})">Ajouter au Panier</button>
                 `;
                 productContainer.appendChild(productCard);
             });
@@ -142,12 +146,22 @@
                 cartItem.className = 'cart-item';
                 cartItem.innerHTML = `
                     <img src="${item.image}" alt="${item.name}">
-                    <span>$${item.price} x ${item.quantity}</span>
+                    <span>$${item.price} x 
+                        <div class="quantity">
+                            <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.id}, this.value)">
+                        </div>
+                    </span>
                 `;
                 cartList.appendChild(cartItem);
                 total += item.price * item.quantity;
             });
             document.getElementById("totalPrice").innerText = `$${total}`;
+        }
+
+        // Fonction pour mettre à jour la quantité d'un produit
+        function updateQuantity(productId, newQuantity) {
+            cart[productId].quantity = Math.max(1, parseInt(newQuantity));
+            updateCart();
         }
 
         // Initialisation des produits
