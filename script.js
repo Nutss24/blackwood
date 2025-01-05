@@ -1,5 +1,5 @@
 // Définir l'ID de la feuille Google Sheets
-const sheetId = 'Votre-ID-de-Sheet'; // Remplacez par votre ID de Sheet
+const sheetId = '1vFod5-4hyPG5NArGzSd44qwJ-B7NZAofCU8QnNSV7F'; // Remplacez par votre ID de Sheet
 const range = 'A:C'; // Colonne de données (nom du produit, image, prix)
 
 // Fonction pour charger les produits depuis Google Sheets
