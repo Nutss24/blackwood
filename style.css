@@ -1,72 +1,27 @@
-/* Style de base */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa; /* Couleur de fond grise clair pour une base propre */
-  color: #333; /* Couleur du texte */
-  text-align: center;
-  padding: 20px;
+    font-family: Arial, sans-serif;
+    margin: 20px;
 }
 
-h1 {
-  color: #444; /* Couleur du titre principale */
+header {
+    text-align: center;
 }
 
-.product-item {
-  display: inline-block;
-  width: 220px;
-  margin: 20px;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff; /* Arrière-plan blanc pour les éléments */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère pour les éléments */
+section {
+    margin-bottom: 20px;
 }
 
-.product-item img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px; /* Bordure arrondie pour les images */
+#products ul, #cart ul {
+    list-style-type: none;
+    padding: 0;
 }
 
-.product-item h3 {
-  margin-top: 10px;
-  color: #555;
+#cart {
+    margin-top: 20px;
 }
 
-.product-item button {
-  background-color: #007bff; /* Couleur du bouton principal */
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.product-item button:hover {
-  background-color: #0056b3; /* Effet hover pour les boutons */
-}
-
-.cart-item {
-  list-style-type: none;
-  padding: 10px;
-  background-color: #fff;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.cart-item span {
-  font-weight: bold;
-}
-
-ul {
-  padding-left: 0;
-}
-
-button {
-  margin-top: 10px;
-}
-
-h2 {
-  color: #007bff; /* Couleur des sous-titres pour la cohérence */
+#cart-list li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
