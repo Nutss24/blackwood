@@ -1,66 +1,71 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const productListElement = document.getElementById('product-list');
-  const cartElement = document.getElementById('cart');
-  
-  let products = [];
-  let cart = [];
+// Exemple de produits
+const products = [
+    { id: 1, name: 'Bière', price: 5 },
+    { id: 2, name: 'Cocktail', price: 8 },
+    { id: 3, name: 'Whisky', price: 10 }
+];
 
-  fetch('https://sheets.googleapis.com/v4/spreadsheets/YOUR_SHEET_ID/values/products?key=YOUR_API_KEY')
-    .then(response => response.json())
-    .then(data => {
-      products = data.values;
-      displayProducts();
-    })
-    .catch(error => console.error('Erreur de chargement des produits :', error));
+const productContainer = document.getElementById('product-list');
+const cartContainer = document.getElementById('cart-list');
 
-  function displayProducts() {
-    productListElement.innerHTML = products.map((product, index) => `
-      <div class="product-item">
-        <img src="${product[2]}" alt="${product[1]}">
-        <h3>${product[1]}</h3>
-        <button onclick="addToCart(${index})">Ajouter au panier</button>
-      </div>
-    `).join('');
-  }
+let cart = [];
 
-  function addToCart(index) {
-    const product = products[index];
-    cart.push(product);
-    updateCart();
-  }
+// Afficher les produits
+function displayProducts() {
+    products.forEach(product => {
+        const productItem = document.createElement('li');
+        productItem.innerHTML = `
+            ${product.name} - ${product.price}€
+            <button onclick="addToCart(${product.id})">Ajouter au panier</button>
+        `;
+        productContainer.appendChild(productItem);
+    });
+}
 
-  function updateCart() {
-    cartElement.innerHTML = `
-      <h2>Panier</h2>
-      <ul>
-        ${cart.map((product, index) => `
-          <li class="cart-item">
-            ${product[1]} - Quantité : 1
-          </li>
-        `).join('')}
-        <button onclick="checkout()">Valider le panier</button>
-      </ul>
-    `;
-  }
+// Ajouter au panier
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    const existingProduct = cart.find(p => p.id === product.id);
 
-  function checkout() {
-    fetch('https://sheets.googleapis.com/v4/spreadsheets/YOUR_SHEET_ID/values/cart!A1:append?key=YOUR_API_KEY', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ values: cart })
-    })
-    .then(response => response.json())
-    .then(data => {
-      alert('Commande validée et enregistrée!');
-      cart = [];
-      updateCart();
-    })
-    .catch(error => console.error('Erreur de validation du panier :', error));
-  }
+    if (existingProduct) {
+        existingProduct.quantity++;
+    } else {
+        cart.push({ ...product, quantity: 1 });
+    }
+
+    displayCart();
+}
+
+// Afficher le panier
+function displayCart() {
+    cartContainer.innerHTML = '';
+    cart.forEach(item => {
+        const cartItem = document.createElement('li');
+        cartItem.innerHTML = `
+            ${item.name} - ${item.price}€ x ${item.quantity}
+            <button onclick="removeFromCart(${item.id})">Retirer</button>
+        `;
+        cartContainer.appendChild(cartItem);
+    });
+}
+
+// Supprimer du panier
+function removeFromCart(productId) {
+    cart = cart.filter(p => p.id !== productId);
+    displayCart();
+}
+
+// Valider le panier et envoyer les commandes au Google Sheets
+document.getElementById('checkout').addEventListener('click', () => {
+    // Appel API Google Sheets ici
+    console.log('Commande validée !', cart);
+
+    // TODO: Intégrer Google Sheets API pour envoyer les données
 });
 
-// Charger les produits lors du chargement de la page
-fetchProducts();
+// Initialisation
+displayProducts();
+
 
 // Attacher l'événement de validation
 document.getElementById("validate-cart").addEventListener("click", validateCart);
