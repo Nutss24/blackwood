@@ -1,40 +1,24 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blackwood Compta </title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caisse Enregistreuse - Bar RP</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <h1>Bienvenue au Blackwoods</h1>
-        <p>Choisissez vos produits et validez votre commande !</p>
-    </header>
 
-    <main>
-        <!-- Section des produits -->
-        <section id="product-list">
-            <h2>Nos Produits</h2>
-            <div class="products-container" id="products-container">
-                <!-- Les produits seront chargés dynamiquement ici -->
-            </div>
-        </section>
+  <h1>Caisse enregistreuse du Bar</h1>
+  
+  <div id="product-list"></div>
+  <hr>
+  <div id="cart">
+    <h2>Panier</h2>
+    <div id="cart-items"></div>
+    <p>Total : <span id="total" class="total">0</span>€</p>
+    <button id="checkout">Valider la commande</button>
+  </div>
 
-        <!-- Section du panier -->
-        <section id="cart">
-            <h2>Votre Panier</h2>
-            <div class="cart-container" id="cart-container">
-                <p>Votre panier est vide.</p>
-            </div>
-            <button id="validate-cart">Valider la commande</button>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Blackwood - Tous droits réservés.</p>
-    </footer>
-
-    <script src="script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
