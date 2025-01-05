@@ -20,6 +20,10 @@
             font-size: 24px;
             font-weight: bold;
         }
+        .header.dark-mode {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
         .container {
             max-width: 1200px;
             margin: 20px auto;
@@ -43,9 +47,9 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
         }
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        .product-card.dark-mode {
+            background-color: #444;
+            box-shadow: none;
         }
         .product-card img {
             max-width: 100%;
@@ -54,12 +58,19 @@
             max-height: 60px; /* Image plus petite */
             object-fit: cover;
         }
+        .product-card img.dark-mode {
+            filter: brightness(0.8);
+        }
         .cart {
             flex: 1;
             padding: 20px;
             border-radius: 8px;
             border: 1px solid #ddd;
             background-color: #fff;
+        }
+        .cart.dark-mode {
+            background-color: #444;
+            border-color: #666;
         }
         .cart h2 {
             margin-bottom: 20px;
@@ -71,6 +82,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+        .cart-item.dark-mode {
+            border-bottom-color: #666;
         }
         .cart-item img {
             max-width: 60px;
@@ -102,6 +116,9 @@
             font-weight: bold;
             color: #333;
         }
+        .total.dark-mode {
+            color: #fff;
+        }
         .checkout-btn {
             background-color: #007bff;
             color: #fff;
@@ -111,11 +128,19 @@
             cursor: pointer;
             margin-top: 10px;
         }
+        #toggleDarkMode {
+            float: right;
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         Bon de commande Blackwoods
+        <button id="toggleDarkMode">🌓 Mode sombre</button>
     </div>
     <div class="container">
         <div class="product-list" id="productList">
@@ -146,6 +171,7 @@
         let cart = {}; // Tableau du panier pour gérer les quantités
         const SHEET_ID = 'YOUR_GOOGLE_SHEET_ID';
         const SHEET_NAME = 'YOUR_SHEET_NAME';
+        const ACCESS_TOKEN = 'YOUR_ACCESS_TOKEN'; // Remplacez par votre token d'accès Google
 
         // Fonction pour afficher les produits
         function displayProducts() {
@@ -218,7 +244,7 @@
             const response = await fetch(sheetUrl, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${YOUR_ACCESS_TOKEN}`, // Remplacez par votre token d'accès Google
+                    'Authorization': `Bearer ${ACCESS_TOKEN}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
@@ -240,8 +266,15 @@
             saveToSheet();
         }
 
+        // Fonction pour basculer le mode sombre
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Ajout de l'événement pour basculer le mode sombre
+        document.getElementById('toggleDarkMode').addEventListener('click', toggleDarkMode);
+
         // Initialisation des produits
         displayProducts();
     </script>
 </body>
-</html>
