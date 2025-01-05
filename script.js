@@ -2,7 +2,7 @@ let cart = [];
 
 function addToCart(productId) {
     const quantity = parseInt(document.getElementById(`quantity${productId}`).value) || 1;
-    const productName = document.querySelector(`#product${productId} img`).alt;
+    const productName = document.querySelector(`#product${productId} img`).alt; // Récupération du nom du produit via l'image
     const productPrice = 10; // Exemple de prix, à adapter selon vos besoins.
 
     const itemIndex = cart.findIndex(item => item.id === productId);
@@ -12,6 +12,8 @@ function addToCart(productId) {
     } else {
         cart.push({ id: productId, name: productName, price: productPrice, quantity: quantity });
     }
+
+    console.log('Produit ajouté au panier :', cart); // Ajout pour debugging
 
     updateCart();
 }
