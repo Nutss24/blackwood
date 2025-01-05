@@ -1,7 +1,7 @@
 // Fichier : script.js
 
 // URL de l'API Google Sheets (remplacez par votre propre URL générée via Apps Script)
-const SHEETS_API_URL = "https://script.google.com/macros/s/VOTRE_URL_API/exec";
+const SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbyfcK6Dmau7iOKRHn7ft0BvuZU8scdir97DW7fkm57tfFTDpo_aj2EvMOAr-kVYkJDB9g/exec";
 
 // Chargement des produits depuis Google Sheets
 async function loadProducts() {
