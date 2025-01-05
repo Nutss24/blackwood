@@ -31,6 +31,15 @@
             text-align: center;
             color: #777;
         }
+        #userSelectContainer {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+        #userSelect {
+            max-width: 200px;
+        }
     </style>
 </head>
 <body>
@@ -45,6 +54,14 @@
 
     <!-- Contenu principal -->
     <div class="container">
+        <div id="userSelectContainer">
+            <label for="userSelect" class="form-label me-2">Utilisateur :</label>
+            <select id="userSelect" class="form-select">
+                <option value="">Choisir...</option>
+                <!-- Les utilisateurs seront ajoutés dynamiquement -->
+            </select>
+        </div>
+
         <h1 class="mb-4">Produits disponibles</h1>
         <div class="row" id="products">
             <!-- Les produits seront chargés ici -->
@@ -54,13 +71,6 @@
             <h2>Panier</h2>
             <div id="cartItems" class="mb-3">
                 <!-- Articles du panier -->
-            </div>
-            <div class="mb-3">
-                <label for="userSelect" class="form-label">Sélectionnez un utilisateur :</label>
-                <select id="userSelect" class="form-select">
-                    <option value="">Choisir un utilisateur</option>
-                    <!-- Les utilisateurs seront ajoutés dynamiquement -->
-                </select>
             </div>
             <p><strong>Total : $<span id="total">0</span></strong></p>
             <button id="saveOrder" class="btn btn-primary">Enregistrer la commande</button>
@@ -185,7 +195,7 @@
                 updateCart();
                 userSelect.value = ''; // Réinitialiser le champ utilisateur
             } else {
-                alert('Erreur lors de l\'enregistrement.');
+                alert('Erreur lors de l'enregistrement.');
             }
         }
 
@@ -197,6 +207,7 @@
     </script>
 </body>
 </html>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
