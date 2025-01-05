@@ -1,16 +1,16 @@
 let cart = [];
 
 function addToCart(productId) {
-    const quantity = document.getElementById(`quantity${productId}`).value;
-    const productName = document.querySelector(`#product${productId} h3`).textContent;
+    const quantity = parseInt(document.getElementById(`quantity${productId}`).value) || 1;
+    const productName = document.querySelector(`#product${productId} img`).alt;
     const productPrice = 10; // Exemple de prix, à adapter selon vos besoins.
 
     const itemIndex = cart.findIndex(item => item.id === productId);
 
     if (itemIndex !== -1) {
-        cart[itemIndex].quantity = parseInt(quantity); // Mise à jour de la quantité
+        cart[itemIndex].quantity += quantity; // Mise à jour de la quantité si le produit est déjà dans le panier
     } else {
-        cart.push({ id: productId, name: productName, price: productPrice, quantity: parseInt(quantity) });
+        cart.push({ id: productId, name: productName, price: productPrice, quantity: quantity });
     }
 
     updateCart();
@@ -38,9 +38,11 @@ function updateCart() {
 function updateQuantity(productId) {
     const newQuantity = parseInt(document.getElementById(`cart-quantity-${productId}`).value);
     const itemIndex = cart.findIndex(item => item.id === productId);
+
     if (itemIndex !== -1) {
-        cart[itemIndex].quantity = newQuantity;
+        cart[itemIndex].quantity = newQuantity; // Mise à jour de la quantité dans le panier
     }
+
     updateCart();
 }
 
@@ -53,6 +55,6 @@ function checkout() {
     // Simuler l'envoi des données à Google Sheets ici
     console.log('Commande validée !', cart);
     alert('Commande validée et enregistrée dans Google Sheets.');
-    cart = [];
+    cart = []; // Réinitialiser le panier après validation
     updateCart();
 }
