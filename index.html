@@ -3,225 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paleto Bar</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Page Simple Google Sheets</title>
     <style>
+        /* Styles pour le design de la page */
         body {
-            background-color: #f8f9fa; /* Couleur de fond claire */
             font-family: Arial, sans-serif;
+            margin: 20px;
         }
-        .navbar {
+        .product-list {
             margin-bottom: 20px;
         }
-        .card {
-            margin-bottom: 20px;
+        .product {
+            margin-bottom: 15px;
         }
-        #cart {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 8px;
-            background-color: #fff;
+        .product h3 {
+            margin: 0;
         }
-        #cart h2 {
-            margin-bottom: 20px;
-        }
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            color: #777;
-        }
-        #userSelectContainer {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            margin-bottom: 10px;
-        }
-        #userSelect {
-            max-width: 200px;
-        }
-        #userSalary {
-            margin-left: 15px;
-            font-weight: bold;
-            color: #007bff;
+        .add-to-cart {
+            margin-top: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <!-- Barre de navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="logo.png" alt="Logo" width="40" height="40" class="me-2"> Paleto Bar
-            </a>
-        </div>
-    </nav>
 
-    <!-- Contenu principal -->
-    <div class="container">
-        <div id="userSelectContainer">
-            <label for="userSelect" class="form-label me-2">Utilisateur :</label>
-            <select id="userSelect" class="form-select">
-                <option value="">Choisir...</option>
-                <!-- Les utilisateurs seront ajoutés dynamiquement -->
-            </select>
-            <span id="userSalary"></span>
+    <h1>Produits</h1>
+    <div class="product-list">
+        <div class="product" data-id="1">
+            <h3>Produit 1</h3>
+            <p>Description du produit 1</p>
+            <button class="add-to-cart">Ajouter au panier</button>
         </div>
-
-        <h1 class="mb-4">Produits disponibles</h1>
-        <div class="row" id="products">
-            <!-- Les produits seront chargés ici -->
+        <div class="product" data-id="2">
+            <h3>Produit 2</h3>
+            <p>Description du produit 2</p>
+            <button class="add-to-cart">Ajouter au panier</button>
         </div>
-
-        <div id="cart" class="mt-5">
-            <h2>Panier</h2>
-            <div id="cartItems" class="mb-3">
-                <!-- Articles du panier -->
-            </div>
-            <p><strong>Total : $<span id="total">0</span></strong></p>
-            <button id="saveOrder" class="btn btn-primary">Enregistrer la commande</button>
-        </div>
+        <!-- Ajoute plus de produits ici si nécessaire -->
     </div>
 
-    <!-- Pied de page -->
-    <footer class="footer">
-        <p>&copy; 2025 Paleto Bar | Conçu pour serveur RP</p>
-    </footer>
+    <h2>Panier</h2>
+    <ul id="cart-list">
+        <!-- La liste des produits ajoutés au panier sera affichée ici -->
+    </ul>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const spreadsheetId = 'VOTRE_SPREADSHEET_ID'; // Remplacez par l'ID de votre Google Sheets
-        const apiKey = 'VOTRE_API_KEY'; // Remplacez par votre clé API Google
-        const baseUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values`;
-
-        // Stockage local du panier
-        let cart = [];
-
-        // Charger les produits depuis Google Sheets
-        async function loadProducts() {
-            const response = await fetch(`${baseUrl}/Produits?key=${apiKey}`);
-            const data = await response.json();
-
-            const products = data.values.slice(1); // Ignorer la première ligne (en-têtes)
-
-            const productsDiv = document.getElementById('products');
-            productsDiv.innerHTML = '';
-
-            products.forEach(([id, name, price]) => {
-                const productCard = `
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">${name}</h5>
-                                <p class="card-text">Prix : $${price}</p>
-                                <button class="btn btn-success" onclick="addToCart('${id}', '${name}', ${price})">Ajouter au panier</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                productsDiv.innerHTML += productCard;
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const cartList = document.getElementById('cart-list');
+        
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', async function() {
+                const productId = this.parentElement.dataset.id;
+                addToCart(productId);
             });
-        }
-
-        // Ajouter un produit au panier
-        function addToCart(id, name, price) {
-            const item = cart.find((item) => item.id === id);
-            if (item) {
-                item.quantity += 1;
-            } else {
-                cart.push({ id, name, price, quantity: 1 });
-            }
-            updateCart();
-        }
-
-        // Mettre à jour le panier
-        function updateCart() {
-            const cartItemsDiv = document.getElementById('cartItems');
-            cartItemsDiv.innerHTML = '';
-
-            let total = 0;
-
-            cart.forEach(({ id, name, price, quantity }) => {
-                total += price * quantity;
-
-                const itemDiv = document.createElement('div');
-                itemDiv.innerHTML = `
-                    ${name} x${quantity} - $${price * quantity}
-                    <hr>
-                `;
-                cartItemsDiv.appendChild(itemDiv);
-            });
-
-            document.getElementById('total').textContent = total;
-        }
-
-        // Charger la liste des utilisateurs
-        async function loadUsers() {
-            const response = await fetch(`${baseUrl}/Utilisateurs?key=${apiKey}`);
-            const data = await response.json();
-
-            const users = data.values.slice(1); // Ignorer la première ligne (en-têtes)
-
-            const userSelect = document.getElementById('userSelect');
-            users.forEach(([username, salary]) => {
-                const option = document.createElement('option');
-                option.value = salary;
-                option.textContent = username;
-                userSelect.appendChild(option);
-            });
-        }
-
-        // Afficher le salaire de l'utilisateur sélectionné
-        document.getElementById('userSelect').addEventListener('change', (event) => {
-            const selectedSalary = event.target.value;
-            const userSalarySpan = document.getElementById('userSalary');
-            if (selectedSalary) {
-                userSalarySpan.textContent = `Salaire : $${selectedSalary}`;
-            } else {
-                userSalarySpan.textContent = '';
-            }
         });
 
-        // Enregistrer la commande dans Google Sheets
-        async function saveOrder() {
-            const userSelect = document.getElementById('userSelect');
-            const selectedUser = userSelect.options[userSelect.selectedIndex].text;
+        function addToCart(productId) {
+            // Ajouter le produit au panier (simuler la communication avec Google Sheets)
+            const productName = this.parentElement.querySelector('h3').textContent;
+            const listItem = document.createElement('li');
+            listItem.textContent = `Produit ${productId}: ${productName}`;
+            cartList.appendChild(listItem);
 
-            if (!selectedUser || userSelect.value === '') {
-                alert('Veuillez sélectionner un utilisateur !');
-                return;
-            }
-
-            if (cart.length === 0) {
-                alert('Le panier est vide !');
-                return;
-            }
-
-            const response = await fetch(`${baseUrl}/Ventes:append?valueInputOption=USER_ENTERED&key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    values: cart.map(({ name, quantity, price }) => [selectedUser, name, quantity, price * quantity]),
-                }),
-            });
-
-            if (response.ok) {
-                alert('Commande enregistrée !');
-                cart = [];
-                updateCart();
-                userSelect.value = ''; // Réinitialiser le champ utilisateur
-                document.getElementById('userSalary').textContent = ''; // Réinitialiser le salaire affiché
-            } else {
-                alert('Erreur lors de l'enregistrement.');
-            }
+            console.log(`Produit ${productId} ajouté au panier`);
         }
-
-        // Charger les produits et les utilisateurs au démarrage
-        loadProducts();
-        loadUsers();
-
-        document.getElementById('saveOrder').addEventListener('click', saveOrder);
     </script>
+
 </body>
 </html>
