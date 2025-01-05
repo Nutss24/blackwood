@@ -37,9 +37,8 @@
             max-width: 100%;
             border-radius: 8px;
             cursor: pointer;
-        }
-        .product-card p {
-            margin: 10px 0;
+            max-height: 80px; /* Diminue la taille des images des produits */
+            object-fit: cover;
         }
         .cart {
             flex: 1;
@@ -62,15 +61,21 @@
             max-width: 50px;
             margin-right: 10px;
         }
-        .cart-item span {
-            font-size: 14px;
+        .cart-item .details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .cart-item .details span {
+            margin-left: 10px;
         }
         .cart-item .quantity {
             display: flex;
             align-items: center;
         }
         .cart-item .quantity input {
-            width: 30px;
+            width: 50px;
             text-align: center;
             margin-left: 5px;
         }
@@ -146,16 +151,18 @@
                 cartItem.className = 'cart-item';
                 cartItem.innerHTML = `
                     <img src="${item.image}" alt="${item.name}">
-                    <span>$${item.price} x 
+                    <div class="details">
+                        <span>$${item.price}</span>
+                        <span>x</span>
                         <div class="quantity">
                             <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.id}, this.value)">
                         </div>
-                    </span>
+                    </div>
                 `;
                 cartList.appendChild(cartItem);
                 total += item.price * item.quantity;
             });
-            document.getElementById("totalPrice").innerText = `$${total}`;
+            document.getElementById("totalPrice").innerText = `$${total.toFixed(2)}`;
         }
 
         // Fonction pour mettre à jour la quantité d'un produit
