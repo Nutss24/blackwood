@@ -7,106 +7,85 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #555;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     .product {
-      display: inline-block;
-      width: 200px;
-      margin: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
     }
-    img {
-      width: 100%;
+    .product img {
+      max-width: 150px;
+      margin-right: 20px;
+      border-radius: 8px;
+    }
+    .product-details {
+      flex-grow: 1;
+    }
+    .product-details p {
+      margin: 5px 0;
+    }
+    .product button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .product button:hover {
+      background-color: #0056b3;
     }
     .panier {
       margin-top: 20px;
+    }
+    .panier p {
+      margin: 5px 0;
+    }
+    .order-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 30px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center;
+      width: 50%;
+    }
+    .order-btn:hover {
+      background-color: #218838;
     }
   </style>
 </head>
 <body>
 
-  <h1>Menu du Bar</h1>
-  <div id="product-list"></div>
+  <div class="container">
+    <h1>Menu du Bar</h1>
+    <div id="product-list"></div>
 
-  <h2>Panier</h2>
-  <div id="panier-list"></div>
+    <h2>Panier</h2>
+    <div class="panier" id="panier-list"></div>
 
-  <h2>Passer une commande</h2>
-  <button onclick="passerCommande()">Passer la commande</button>
+    <button class="order-btn" onclick="passerCommande()">Passer la commande</button>
+  </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-c. JavaScript - Gestion des produits et du panier :
-javascript
-Copier le code
-let panier = JSON.parse(localStorage.getItem('panier')) || [];
-
-function getProductsFromSheet() {
-  const sheetId = 'TON_ID_DE_FEUILLE';
-  const sheetRange = 'A2:D'; // A2:D : zone de ton tableau
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}?key=TON_API_KEY`;
-
-  fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      displayProducts(data.values);
-    });
-}
-
-function displayProducts(products) {
-  const container = document.getElementById('product-list');
-  products.forEach(product => {
-    const [name, description, imageUrl, price] = product;
-    container.innerHTML += `
-      <div class="product">
-        <img src="${imageUrl}" alt="${name}" />
-        <p>${name} - ${price}€</p>
-        <button onclick="ajouterAuPanier('${name}', ${price})">Ajouter au Panier</button>
-      </div>
-    `;
-  });
-}
-
-function ajouterAuPanier(name, price) {
-  panier.push({ name, price });
-  localStorage.setItem('panier', JSON.stringify(panier));
-  displayPanier();
-}
-
-function displayPanier() {
-  const panierContainer = document.getElementById('panier-list');
-  panierContainer.innerHTML = '';
-  panier.forEach(item => {
-    panierContainer.innerHTML += `<p>${item.name} - ${item.price}€</p>`;
-  });
-}
-
-function passerCommande() {
-  const clientName = prompt("Entrez votre nom pour passer la commande :");
-  if (!clientName) return;
-
-  const sheetId = 'TON_ID_DE_FEUILLE';
-  const sheetRange = 'A2:D'; // Range où enregistrer les commandes
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}:append?valueInputOption=RAW&key=TON_API_KEY`;
-
-  const values = panier.map(item => [item.name, 1, item.price * 1, clientName]); // Nom, quantite, total, client
-  const body = { values };
-
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ ...body, range: sheetRange })
-  })
-  .then(response => response.json())
-  .then(() => {
-    alert('Commande passée avec succès!');
-    panier = [];
-    localStorage.removeItem('panier');
-    displayPanier();
-  });
-}
-
-// Initialisation
-getProductsFromSheet();
