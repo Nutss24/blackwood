@@ -84,3 +84,17 @@ footer {
     text-align: center;
     margin-top: 20px;
 }
+/* CSS du produit */
+.product {
+    display: inline-block;
+    width: calc(33% - 10px); /* Ajustement pour 3 produits par ligne avec marge */
+    margin-right: 10px;  /* Espacement entre les produits */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product img {
+    width: 100%;
+    cursor: pointer; /* Pointer pour le clic */
+}
+
