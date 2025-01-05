@@ -1,112 +1,90 @@
-// Fichier : script.js
+// Fonction pour récupérer les produits depuis Google Sheets
+async function fetchProducts() {
+  const SHEET_ID = '1vFod5-4hyPG5NArGzSd44qwJ-B7NZAofCU8QnNSV7F'; // Remplacez par votre GSheet ID
+  const API_URL = `https://script.google.com/macros/s/AKfycbyfcK6Dmau7iOKRHn7ft0BvuZU8scdir97DW7fkm57tfFTDpo_aj2EvMOAr-kVYkJDB9g/exec`;
 
-// URL de l'API Google Sheets (remplacez par votre propre URL générée via Apps Script)
-const SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbyfcK6Dmau7iOKRHn7ft0BvuZU8scdir97DW7fkm57tfFTDpo_aj2EvMOAr-kVYkJDB9g/exec";
+  try {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+    const products = data.values;
+    let html = '';
 
-// Chargement des produits depuis Google Sheets
-async function loadProducts() {
-    try {
-        const response = await fetch(`${SHEETS_API_URL}?action=getProducts`);
-        const products = await response.json();
-
-        const container = document.getElementById("products-container");
-        container.innerHTML = ""; // Vider le conteneur avant de le remplir
-
-        products.forEach(product => {
-            const productDiv = document.createElement("div");
-            productDiv.classList.add("product");
-
-            productDiv.innerHTML = `
-                <img src="${product.image}" alt="${product.name}" />
-                <h3>${product.name}</h3>
-                <p>${product.price} €</p>
-                <button onclick="addToCart('${product.id}', '${product.name}', ${product.price})">Ajouter au panier</button>
-            `;
-
-            container.appendChild(productDiv);
-        });
-    } catch (error) {
-        console.error("Erreur lors du chargement des produits :", error);
-    }
-}
-
-// Panier (stocké localement dans une variable)
-const cart = {};
-
-function addToCart(id, name, price) {
-    if (!cart[id]) {
-        cart[id] = { name, price, quantity: 1 };
-    } else {
-        cart[id].quantity++;
-    }
-    renderCart();
-}
-
-function renderCart() {
-    const container = document.getElementById("cart-container");
-    container.innerHTML = "";
-
-    const items = Object.values(cart);
-    if (items.length === 0) {
-        container.innerHTML = "<p>Votre panier est vide.</p>";
-        return;
-    }
-
-    items.forEach(item => {
-        const cartItem = document.createElement("div");
-        cartItem.classList.add("cart-item");
-
-        cartItem.innerHTML = `
-            <span>${item.name} - ${item.price} € x ${item.quantity}</span>
-            <button onclick="updateQuantity('${item.name}', -1)">-</button>
-            <button onclick="updateQuantity('${item.name}', 1)">+</button>
-        `;
-
-        container.appendChild(cartItem);
+    products.forEach((product, index) => {
+      html += `
+        <div class="product-card">
+          <img src="${product[2]}" alt="${product[0]}">
+          <h3>${product[0]}</h3>
+          <p>${product[1]}</p>
+          <input type="number" class="quantity" data-index="${index}" min="1" value="1">
+          <button class="add-to-cart" data-index="${index}">Ajouter</button>
+        </div>
+      `;
     });
+
+    document.getElementById('product-list').innerHTML = html;
+
+    // Add event listeners for adding to cart
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', addToCart);
+    });
+
+  } catch (error) {
+    console.error("Erreur lors du chargement des produits :", error);
+  }
 }
 
-function updateQuantity(name, delta) {
-    const item = Object.values(cart).find(i => i.name === name);
-    if (item) {
-        item.quantity += delta;
-        if (item.quantity <= 0) {
-            delete cart[item.name];
-        }
-    }
-    renderCart();
+// Gestion du panier
+let cart = [];
+let totalAmount = 0;
+
+function addToCart(event) {
+  const index = event.target.dataset.index;
+  const quantity = parseInt(document.querySelector(`.quantity[data-index="${index}"]`).value);
+  const product = {
+    name: document.querySelector(`.product-card img[data-index="${index}"]`).alt,
+    quantity: quantity,
+  };
+
+  cart.push(product);
+  updateCart();
 }
 
-// Validation du panier
-async function validateCart() {
-    const items = Object.values(cart);
-    if (items.length === 0) {
-        alert("Votre panier est vide !");
-        return;
-    }
+function updateCart() {
+  let html = '';
+  totalAmount = 0;
 
-    try {
-        const response = await fetch(SHEETS_API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "submitOrder", items })
-        });
+  cart.forEach(product => {
+    html += `<p>${product.name} x${product.quantity}</p>`;
+    totalAmount += product.quantity * 5; // Exemple de calcul du prix unitaire (ajuster selon tes données)
+  });
 
-        const result = await response.json();
-        if (result.success) {
-            alert("Commande validée avec succès !");
-            Object.keys(cart).forEach(key => delete cart[key]); // Réinitialiser le panier
-            renderCart();
-        } else {
-            alert("Erreur lors de la validation de la commande.");
-        }
-    } catch (error) {
-        console.error("Erreur lors de la validation de la commande :", error);
-    }
+  document.getElementById('cart-items').innerHTML = html;
+  document.getElementById('total').textContent = totalAmount;
 }
 
-// Charger les produits au démarrage
-loadProducts();
+// Enregistrement des commandes
+document.getElementById('checkout').addEventListener('click', async () => {
+  const SHEET_ID = 'votre-id-de-fiche'; // Remplacez par votre GSheet ID
+  const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Orders!A1:append?valueInputOption=RAW&key=VOTRE-CLÉ-API`;
+
+  const orderData = cart.map(product => [product.name, product.quantity, totalAmount]);
+  
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values: orderData }),
+    });
+    alert('Commande enregistrée avec succès !');
+    cart = [];
+    updateCart();
+  } catch (error) {
+    console.error("Erreur lors de l'enregistrement des données :", error);
+  }
+});
+
+// Charger les produits lors du chargement de la page
+fetchProducts();
 
 // Attacher l'événement de validation
 document.getElementById("validate-cart").addEventListener("click", validateCart);
