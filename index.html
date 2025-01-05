@@ -37,7 +37,9 @@
     <!-- Barre de navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Paleto Bar</a>
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="logo.png" alt="Logo" width="40" height="40" class="me-2"> Paleto Bar
+            </a>
         </div>
     </nav>
 
@@ -53,6 +55,13 @@
             <div id="cartItems" class="mb-3">
                 <!-- Articles du panier -->
             </div>
+            <div class="mb-3">
+                <label for="userSelect" class="form-label">Sélectionnez un utilisateur :</label>
+                <select id="userSelect" class="form-select">
+                    <option value="">Choisir un utilisateur</option>
+                    <!-- Les utilisateurs seront ajoutés dynamiquement -->
+                </select>
+            </div>
             <p><strong>Total : $<span id="total">0</span></strong></p>
             <button id="saveOrder" class="btn btn-primary">Enregistrer la commande</button>
         </div>
@@ -62,6 +71,132 @@
     <footer class="footer">
         <p>&copy; 2025 Paleto Bar | Conçu pour serveur RP</p>
     </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const spreadsheetId = 'VOTRE_SPREADSHEET_ID'; // Remplacez par l'ID de votre Google Sheets
+        const apiKey = 'VOTRE_API_KEY'; // Remplacez par votre clé API Google
+        const baseUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values`;
+
+        // Stockage local du panier
+        let cart = [];
+
+        // Charger les produits depuis Google Sheets
+        async function loadProducts() {
+            const response = await fetch(`${baseUrl}/Produits?key=${apiKey}`);
+            const data = await response.json();
+
+            const products = data.values.slice(1); // Ignorer la première ligne (en-têtes)
+
+            const productsDiv = document.getElementById('products');
+            productsDiv.innerHTML = '';
+
+            products.forEach(([id, name, price]) => {
+                const productCard = `
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">${name}</h5>
+                                <p class="card-text">Prix : $${price}</p>
+                                <button class="btn btn-success" onclick="addToCart('${id}', '${name}', ${price})">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                productsDiv.innerHTML += productCard;
+            });
+        }
+
+        // Ajouter un produit au panier
+        function addToCart(id, name, price) {
+            const item = cart.find((item) => item.id === id);
+            if (item) {
+                item.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+            updateCart();
+        }
+
+        // Mettre à jour le panier
+        function updateCart() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            cartItemsDiv.innerHTML = '';
+
+            let total = 0;
+
+            cart.forEach(({ id, name, price, quantity }) => {
+                total += price * quantity;
+
+                const itemDiv = document.createElement('div');
+                itemDiv.innerHTML = `
+                    ${name} x${quantity} - $${price * quantity}
+                    <hr>
+                `;
+                cartItemsDiv.appendChild(itemDiv);
+            });
+
+            document.getElementById('total').textContent = total;
+        }
+
+        // Charger la liste des utilisateurs
+        async function loadUsers() {
+            const response = await fetch(`${baseUrl}/Utilisateurs?key=${apiKey}`);
+            const data = await response.json();
+
+            const users = data.values.slice(1); // Ignorer la première ligne (en-têtes)
+
+            const userSelect = document.getElementById('userSelect');
+            users.forEach(([username]) => {
+                const option = document.createElement('option');
+                option.value = username;
+                option.textContent = username;
+                userSelect.appendChild(option);
+            });
+        }
+
+        // Enregistrer la commande dans Google Sheets
+        async function saveOrder() {
+            const userSelect = document.getElementById('userSelect');
+            const selectedUser = userSelect.value;
+
+            if (!selectedUser) {
+                alert('Veuillez sélectionner un utilisateur !');
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert('Le panier est vide !');
+                return;
+            }
+
+            const response = await fetch(`${baseUrl}/Ventes:append?valueInputOption=USER_ENTERED&key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    values: cart.map(({ name, quantity, price }) => [selectedUser, name, quantity, price * quantity]),
+                }),
+            });
+
+            if (response.ok) {
+                alert('Commande enregistrée !');
+                cart = [];
+                updateCart();
+                userSelect.value = ''; // Réinitialiser le champ utilisateur
+            } else {
+                alert('Erreur lors de l\'enregistrement.');
+            }
+        }
+
+        // Charger les produits et les utilisateurs au démarrage
+        loadProducts();
+        loadUsers();
+
+        document.getElementById('saveOrder').addEventListener('click', saveOrder);
+    </script>
+</body>
+</html>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
