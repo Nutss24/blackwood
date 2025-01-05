@@ -3,124 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RP Shop - Design élégant</title>
-    <style>
-        /* CSS Styles for the design */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        .product-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .product {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            width: calc(33.33% - 20px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .product h3 {
-            margin: 0;
-            font-size: 18px;
-        }
-        .product p {
-            font-size: 14px;
-            color: #555;
-        }
-        .add-to-cart {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .cart {
-            margin-top: 30px;
-        }
-        .cart h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .cart ul {
-            list-style: none;
-            padding: 0;
-        }
-        .cart ul li {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 5px;
-        }
-    </style>
+    <title>Design Simple - Google Sheets</title>
+    <link rel="stylesheet" href="style.css"> <!-- Chargement des styles -->
 </head>
 <body>
 
     <header>
         <h1>RP Shop</h1>
-        <p>Ajoutez des produits à votre panier et passez commande facilement.</p>
     </header>
 
-    <div class="product-list">
-        <div class="product" data-id="1">
-            <h3>Produit 1</h3>
-            <p>Description du produit 1</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product" data-id="2">
-            <h3>Produit 2</h3>
-            <p>Description du produit 2</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <div class="product" data-id="3">
-            <h3>Produit 3</h3>
-            <p>Description du produit 3</p>
-            <button class="add-to-cart">Ajouter au panier</button>
-        </div>
-        <!-- Add more products as needed -->
-    </div>
+    <main>
+        <section class="product-section">
+            <h2>Nos Produits</h2>
+            <div class="product-list">
+                <div class="product" data-id="1">
+                    <img src="path/to/image1.jpg" alt="Produit 1">
+                    <h3>Produit 1</h3>
+                    <p>Description du produit 1</p>
+                </div>
+                <div class="product" data-id="2">
+                    <img src="path/to/image2.jpg" alt="Produit 2">
+                    <h3>Produit 2</h3>
+                    <p>Description du produit 2</p>
+                </div>
+                <!-- Ajoutez plus de produits ici -->
+            </div>
+        </section>
 
-    <div class="cart">
-        <h2>Panier</h2>
-        <ul id="cart-list">
-            <!-- Products added to cart will be displayed here -->
-        </ul>
-    </div>
+        <section class="cart-section">
+            <h2>Panier</h2>
+            <ul id="cart-list">
+                <!-- La liste des produits ajoutés au panier sera affichée ici -->
+            </ul>
+        </section>
+    </main>
 
-    <script>
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-        const cartList = document.getElementById('cart-list');
-        
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const productId = this.parentElement.dataset.id;
-                addToCart(productId);
-            });
-        });
+    <footer>
+        <p>&copy; 2025 RP Shop - Tous droits réservés</p>
+    </footer>
 
-        function addToCart(productId) {
-            const productName = this.parentElement.querySelector('h3').textContent;
-            const listItem = document.createElement('li');
-            listItem.textContent = `Produit ${productId}: ${productName}`;
-            cartList.appendChild(listItem);
-
-            console.log(`Produit ${productId} ajouté au panier`);
-        }
-    </script>
-
+    <script src="script.js"></script> <!-- Chargement du script JavaScript -->
 </body>
 </html>
