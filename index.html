@@ -20,6 +20,9 @@
         }
         .product-list {
             flex: 2;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
         .product-card {
             background: #fff;
@@ -91,7 +94,10 @@
         const products = [
             { id: 1, name: "Produit 1", price: 10, image: "https://via.placeholder.com/150" },
             { id: 2, name: "Produit 2", price: 15, image: "https://via.placeholder.com/150" },
-            { id: 3, name: "Produit 3", price: 20, image: "https://via.placeholder.com/150" }
+            { id: 3, name: "Produit 3", price: 20, image: "https://via.placeholder.com/150" },
+            { id: 4, name: "Produit 4", price: 25, image: "https://via.placeholder.com/150" },
+            { id: 5, name: "Produit 5", price: 30, image: "https://via.placeholder.com/150" },
+            { id: 6, name: "Produit 6", price: 35, image: "https://via.placeholder.com/150" }
         ];
 
         let cart = {}; // Tableau du panier pour gérer les quantités
@@ -143,12 +149,6 @@
             });
             document.getElementById("totalPrice").innerText = `$${total}`;
         }
-
-        // Initialisation des produits
-        displayProducts();
-    </script>
-</body>
-</html>
 
         // Initialisation des produits
         displayProducts();
