@@ -1,67 +1,64 @@
-// Exemple de produits
-const products = [
-    { id: 1, name: 'Bière', price: 5 },
-    { id: 2, name: 'Cocktail', price: 8 },
-    { id: 3, name: 'Whisky', price: 10 }
-];
-
-const productContainer = document.getElementById('product-list');
-const cartContainer = document.getElementById('cart-list');
-
-let cart = [];
-
-// Afficher les produits
-function displayProducts() {
-    products.forEach(product => {
-        const productItem = document.createElement('li');
-        productItem.innerHTML = `
-            ${product.name} - ${product.price}€
-            <button onclick="addToCart(${product.id})">Ajouter au panier</button>
-        `;
-        productContainer.appendChild(productItem);
-    });
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
-// Ajouter au panier
-function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    const existingProduct = cart.find(p => p.id === product.id);
-
-    if (existingProduct) {
-        existingProduct.quantity++;
-    } else {
-        cart.push({ ...product, quantity: 1 });
-    }
-
-    displayCart();
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 20px;
+    text-align: center;
 }
 
-// Afficher le panier
-function displayCart() {
-    cartContainer.innerHTML = '';
-    cart.forEach(item => {
-        const cartItem = document.createElement('li');
-        cartItem.innerHTML = `
-            ${item.name} - ${item.price}€ x ${item.quantity}
-            <button onclick="removeFromCart(${item.id})">Retirer</button>
-        `;
-        cartContainer.appendChild(cartItem);
-    });
+header h1 {
+    margin: 0;
 }
 
-// Supprimer du panier
-function removeFromCart(productId) {
-    cart = cart.filter(p => p.id !== productId);
-    displayCart();
+section {
+    margin: 20px;
 }
 
-// Valider le panier et envoyer les commandes au Google Sheets
-document.getElementById('checkout').addEventListener('click', () => {
-    // Appel API Google Sheets ici
-    console.log('Commande validée !', cart);
+#products, #cart {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
 
-    // TODO: Intégrer Google Sheets API pour envoyer les données
-});
+ul {
+    padding-left: 0;
+}
 
-// Initialisation
-displayProducts();
+li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: center;
+}
