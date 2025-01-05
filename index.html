@@ -1,21 +1,31 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bar RP - Produits</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar en RP - Commandes</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Bienvenue au Bar RP</h1>
-  <header>
-  <h1>Bienvenue au Bar RP</h1>
-  <p>Découvrez nos délicieux produits et gérez votre panier facilement !</p>
-</header>
-  
-  <div id="product-list"></div>
-  <div id="cart"></div>
+    <header>
+        <h1>Bar en RP - Commandes</h1>
+    </header>
 
-  <script src="script.js"></script>
+    <section id="products">
+        <h2>Liste de Produits</h2>
+        <ul id="product-list">
+            <!-- Les produits s'afficheront ici -->
+        </ul>
+    </section>
+
+    <section id="cart">
+        <h2>Panier</h2>
+        <ul id="cart-list">
+            <!-- Les articles ajoutés apparaîtront ici -->
+        </ul>
+        <button id="checkout">Valider la commande</button>
+    </section>
+
+    <script src="script.js"></script>
 </body>
 </html>
