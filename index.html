@@ -1,281 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serveur RP - Boutique</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        body.dark-mode {
-            background-color: #333;
-            color: #fff;
-        }
-        .header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .header.dark-mode {
-            background-color: #1a1a1a;
-            color: #fff;
-        }
-        #toggleDarkMode {
-            float: right;
-            background: none;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-        .product-list {
-            flex: 2;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        .product-card {
-            background: #fff;
-            border-radius: 8px;
-            margin: 10px;
-            padding: 15px;
-            width: calc(25% - 40px); /* 4 produits par ligne */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .product-card.dark-mode {
-            background-color: #444;
-            box-shadow: none;
-        }
-        .product-card img {
-            max-width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            max-height: 60px; /* Images plus petites */
-            object-fit: cover;
-        }
-        .product-card img.dark-mode {
-            filter: brightness(0.8);
-        }
-        .cart {
-            flex: 1;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            background-color: #fff;
-        }
-        .cart.dark-mode {
-            background-color: #444;
-            border-color: #666;
-        }
-        .cart h2 {
-            margin-bottom: 20px;
-            color: #007bff;
-        }
-        .cart-item {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .cart-item.dark-mode {
-            border-bottom-color: #666;
-        }
-        .cart-item img {
-            max-width: 60px;
-            margin-right: 15px;
-            border-radius: 4px;
-        }
-        .cart-item .details {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-        .cart-item .quantity {
-            display: flex;
-            align-items: center;
-        }
-        .cart-item .quantity input {
-            width: 50px;
-            text-align: center;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            margin-left: 5px;
-        }
-        .total {
-            margin-top: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-        .total.dark-mode {
-            color: #fff;
-        }
-        .checkout-btn {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bar RP - Commandes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .product {
+      display: inline-block;
+      width: 200px;
+      margin: 20px;
+    }
+    img {
+      width: 100%;
+    }
+    .panier {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        Bon de commande Blackwoods
-        <button id="toggleDarkMode">🌓 Mode sombre</button>
-    </div>
-    <div class="container">
-        <div class="product-list" id="productList">
-            <!-- Les produits seront ajoutés ici via JS -->
-        </div>
-        <div class="cart">
-            <h2>Panier</h2>
-            <ul id="cartList">
-                <!-- Les produits du panier seront affichés ici -->
-            </ul>
-            <div class="total">Total : <span id="totalPrice">$0</span></div>
-            <button class="checkout-btn" onclick="checkout()">Valider la commande</button>
-        </div>
-    </div>
 
-    <script>
-        // Exemple de produits
-        const products = [
-            { id: 1, name: "Produit 1", price: 10, image: "https://via.placeholder.com/150" },
-            { id: 2, name: "Produit 2", price: 15, image: "https://via.placeholder.com/150" },
-            { id: 3, name: "Produit 3", price: 20, image: "https://via.placeholder.com/150" },
-            { id: 4, name: "Produit 4", price: 25, image: "https://via.placeholder.com/150" },
-            { id: 5, name: "Produit 5", price: 30, image: "https://via.placeholder.com/150" },
-            { id: 6, name: "Produit 6", price: 35, image: "https://via.placeholder.com/150" }
-        ];
+  <h1>Menu du Bar</h1>
+  <div id="product-list"></div>
 
-        let cart = {}; // Tableau du panier pour gérer les quantités
+  <h2>Panier</h2>
+  <div id="panier-list"></div>
 
-        // Fonction pour afficher les produits
-        function displayProducts() {
-            const productContainer = document.getElementById("productList");
-            productContainer.innerHTML = ''; // Clear existing products
-            products.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}" onclick="addToCart(${product.id})">
-                    <p>${product.name}</p>
-                    <p>Prix : $${product.price}</p>
-                `;
-                productContainer.appendChild(productCard);
-            });
-        }
+  <h2>Passer une commande</h2>
+  <button onclick="passerCommande()">Passer la commande</button>
 
-        // Fonction pour ajouter un produit au panier
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                if (cart[productId]) {
-                    cart[productId].quantity++;
-                } else {
-                    cart[productId] = { ...product, quantity: 1 };
-                }
-                updateCart();
-            }
-        }
-
-        // Fonction pour mettre à jour le panier
-        function updateCart() {
-            const cartList = document.getElementById("cartList");
-            cartList.innerHTML = ''; // Clear current cart items
-            let total = 0;
-            Object.values(cart).forEach(item => {
-                const cartItem = document.createElement('li');
-                cartItem.className = 'cart-item';
-                cartItem.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="details">
-                        <span>$${item.price}</span>
-                        <span>x</span>
-                        <div class="quantity">
-                            <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.id}, this.value)">
-                        </div>
-                    </div>
-                `;
-                cartList.appendChild(cartItem);
-                total += item.price * item.quantity;
-            });
-            document.getElementById("totalPrice").innerText = `$${total.toFixed(2)}`;
-        }
-
-        // Fonction pour mettre à jour la quantité d'un produit
-        function updateQuantity(productId, newQuantity) {
-            cart[productId].quantity = Math.max(1, parseInt(newQuantity));
-            updateCart();
-        }
-
-        // Fonction pour enregistrer le panier dans Google Sheets
-        async function saveToSheet() {
-            const SHEET_ID = 'YOUR_GOOGLE_SHEET_ID';
-            const SHEET_NAME = 'YOUR_SHEET_NAME';
-            const ACCESS_TOKEN = 'YOUR_ACCESS_TOKEN'; // Remplacez par votre token d'accès Google
-            const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A1:append?valueInputOption=RAW`;
-            const values = [];
-
-            for (const item of Object.values(cart)) {
-                values.push([item.name, item.price, item.quantity, item.price * item.quantity]);
-            }
-
-            const response = await fetch(sheetUrl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${ACCESS_TOKEN}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    range: `${SHEET_NAME}!A1`,
-                    valueInputOption: 'RAW',
-                    values: values
-                })
-            });
-
-            if (response.ok) {
-                alert('Commande enregistrée avec succès dans le Google Sheet!');
-            } else {
-                alert('Erreur lors de l\'enregistrement de la commande.');
-            }
-        }
-
-        // Fonction pour valider la commande et enregistrer dans Google Sheets
-        function checkout() {
-            saveToSheet();
-        }
-
-        // Fonction pour basculer le mode sombre
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
-
-        // Ajout de l'événement pour basculer le mode sombre
-        document.getElementById('toggleDarkMode').addEventListener('click', toggleDarkMode);
-
-        // Initialisation des produits
-        displayProducts();
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
+c. JavaScript - Gestion des produits et du panier :
+javascript
+Copier le code
+let panier = JSON.parse(localStorage.getItem('panier')) || [];
+
+function getProductsFromSheet() {
+  const sheetId = 'TON_ID_DE_FEUILLE';
+  const sheetRange = 'A2:D'; // A2:D : zone de ton tableau
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}?key=TON_API_KEY`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      displayProducts(data.values);
+    });
+}
+
+function displayProducts(products) {
+  const container = document.getElementById('product-list');
+  products.forEach(product => {
+    const [name, description, imageUrl, price] = product;
+    container.innerHTML += `
+      <div class="product">
+        <img src="${imageUrl}" alt="${name}" />
+        <p>${name} - ${price}€</p>
+        <button onclick="ajouterAuPanier('${name}', ${price})">Ajouter au Panier</button>
+      </div>
+    `;
+  });
+}
+
+function ajouterAuPanier(name, price) {
+  panier.push({ name, price });
+  localStorage.setItem('panier', JSON.stringify(panier));
+  displayPanier();
+}
+
+function displayPanier() {
+  const panierContainer = document.getElementById('panier-list');
+  panierContainer.innerHTML = '';
+  panier.forEach(item => {
+    panierContainer.innerHTML += `<p>${item.name} - ${item.price}€</p>`;
+  });
+}
+
+function passerCommande() {
+  const clientName = prompt("Entrez votre nom pour passer la commande :");
+  if (!clientName) return;
+
+  const sheetId = 'TON_ID_DE_FEUILLE';
+  const sheetRange = 'A2:D'; // Range où enregistrer les commandes
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}:append?valueInputOption=RAW&key=TON_API_KEY`;
+
+  const values = panier.map(item => [item.name, 1, item.price * 1, clientName]); // Nom, quantite, total, client
+  const body = { values };
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ ...body, range: sheetRange })
+  })
+  .then(response => response.json())
+  .then(() => {
+    alert('Commande passée avec succès!');
+    panier = [];
+    localStorage.removeItem('panier');
+    displayPanier();
+  });
+}
+
+// Initialisation
+getProductsFromSheet();
