@@ -40,6 +40,11 @@
         #userSelect {
             max-width: 200px;
         }
+        #userSalary {
+            margin-left: 15px;
+            font-weight: bold;
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
@@ -60,6 +65,7 @@
                 <option value="">Choisir...</option>
                 <!-- Les utilisateurs seront ajoutés dynamiquement -->
             </select>
+            <span id="userSalary"></span>
         </div>
 
         <h1 class="mb-4">Produits disponibles</h1>
@@ -158,20 +164,31 @@
             const users = data.values.slice(1); // Ignorer la première ligne (en-têtes)
 
             const userSelect = document.getElementById('userSelect');
-            users.forEach(([username]) => {
+            users.forEach(([username, salary]) => {
                 const option = document.createElement('option');
-                option.value = username;
+                option.value = salary;
                 option.textContent = username;
                 userSelect.appendChild(option);
             });
         }
 
+        // Afficher le salaire de l'utilisateur sélectionné
+        document.getElementById('userSelect').addEventListener('change', (event) => {
+            const selectedSalary = event.target.value;
+            const userSalarySpan = document.getElementById('userSalary');
+            if (selectedSalary) {
+                userSalarySpan.textContent = `Salaire : $${selectedSalary}`;
+            } else {
+                userSalarySpan.textContent = '';
+            }
+        });
+
         // Enregistrer la commande dans Google Sheets
         async function saveOrder() {
             const userSelect = document.getElementById('userSelect');
-            const selectedUser = userSelect.value;
+            const selectedUser = userSelect.options[userSelect.selectedIndex].text;
 
-            if (!selectedUser) {
+            if (!selectedUser || userSelect.value === '') {
                 alert('Veuillez sélectionner un utilisateur !');
                 return;
             }
@@ -194,6 +211,7 @@
                 cart = [];
                 updateCart();
                 userSelect.value = ''; // Réinitialiser le champ utilisateur
+                document.getElementById('userSalary').textContent = ''; // Réinitialiser le salaire affiché
             } else {
                 alert('Erreur lors de l'enregistrement.');
             }
@@ -205,12 +223,5 @@
 
         document.getElementById('saveOrder').addEventListener('click', saveOrder);
     </script>
-</body>
-</html>
-
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="app.js"></script>
 </body>
 </html>
