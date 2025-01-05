@@ -44,6 +44,25 @@
             border-radius: 4px;
             cursor: pointer;
         }
+        .cart {
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 2px solid #ddd;
+        }
+        .cart h2 {
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item img {
+            max-width: 50px;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -51,6 +70,13 @@
         <h1>Catalogue de Produits</h1>
         <div class="product-list" id="productList">
             <!-- Les produits seront ajoutés ici via JS -->
+        </div>
+
+        <div class="cart">
+            <h2>Panier</h2>
+            <ul id="cartList">
+                <!-- Les produits du panier seront affichés ici -->
+            </ul>
         </div>
     </div>
 
@@ -62,9 +88,12 @@
             { id: 3, name: "Produit 3", price: 20, image: "https://via.placeholder.com/150" }
         ];
 
+        let cart = []; // Liste du panier
+
         // Fonction pour afficher les produits
         function displayProducts() {
             const productContainer = document.getElementById("productList");
+            productContainer.innerHTML = ''; // Clear existing products
             products.forEach(product => {
                 const productCard = document.createElement('div');
                 productCard.className = 'product-card';
@@ -78,10 +107,28 @@
             });
         }
 
-        // Fonction pour ajouter au panier
+        // Fonction pour ajouter un produit au panier
         function addToCart(productId) {
-            alert(`Produit ${productId} ajouté au panier`);
-            // Ajouter logiquement au panier ici
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                cart.push(product);
+                updateCart();
+            }
+        }
+
+        // Fonction pour mettre à jour le panier
+        function updateCart() {
+            const cartList = document.getElementById("cartList");
+            cartList.innerHTML = ''; // Clear current cart items
+            cart.forEach(item => {
+                const cartItem = document.createElement('li');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <span>${item.name} - $${item.price}</span>
+                `;
+                cartList.appendChild(cartItem);
+            });
         }
 
         // Initialisation des produits
