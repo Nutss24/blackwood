@@ -1,11 +1,11 @@
 // Définir l'ID de la feuille Google Sheets
-const sheetId = '1vFod5-4hyPG5NArGzSd44qwJ-B7NZAofCU8QnNSV7F'; // Remplacez par votre ID de Sheet
+const sheetId = 'Votre-ID-de-Sheet'; // Remplacez par votre ID de Sheet
 const range = 'A:C'; // Colonne de données (nom du produit, image, prix)
 
 // Fonction pour charger les produits depuis Google Sheets
 async function loadProducts() {
     try {
-        const response = await fetch(`https://script.google.com/macros/s/AKfycbyfcK6Dmau7iOKRHn7ft0BvuZU8scdir97DW7fkm57tfFTDpo_aj2EvMOAr-kVYkJDB9g/exec`); // Replace with your Google Sheets API Key
+        const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=AIzaSyBnZYIO7Hvjhy-ivE_sFRUaCqXPNuWl08U`); // Replace with your Google Sheets API Key
         const data = await response.json();
         const products = data.values;
         displayProducts(products);
