@@ -15,11 +15,14 @@
             background-color: #333;
             color: #fff;
             padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
         }
         nav a {
             color: #fff;
             text-decoration: none;
             margin-right: 20px;
+            cursor: pointer;
         }
         nav a:hover {
             text-decoration: underline;
@@ -27,31 +30,68 @@
         .container {
             padding: 20px;
         }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <nav>
-        <a href="#" onclick="showPage('admin')">Interface Admin</a>
-        <a href="#" onclick="showPage('user')">Interface Utilisateur</a>
+        <a onclick="showSection('admin')">Interface Admin</a>
+        <a onclick="showSection('user')">Interface Utilisateur</a>
     </nav>
-    <div class="container" id="content">
-        <h1>Bienvenue dans le gestionnaire du Bar RP</h1>
-        <p>Choisissez une section pour commencer.</p>
+    <div class="container">
+        <!-- Section Admin -->
+        <div id="admin" class="section">
+            <h1>Interface Admin</h1>
+            <p>Ici, vous pouvez gérer les serveurs et les produits.</p>
+            <h2>Gestion des serveurs</h2>
+            <ul>
+                <li>Ajouter, modifier ou supprimer des serveurs.</li>
+                <li>Définir les grades et les pourcentages associés.</li>
+            </ul>
+            <h2>Gestion des produits</h2>
+            <ul>
+                <li>Ajouter de nouveaux produits.</li>
+                <li>Modifier ou supprimer des produits existants.</li>
+            </ul>
+        </div>
+
+        <!-- Section Utilisateur -->
+        <div id="user" class="section">
+            <h1>Interface Utilisateur</h1>
+            <p>Ici, vous pouvez enregistrer les commandes et calculer les salaires des serveurs.</p>
+            <h2>Commandes</h2>
+            <ul>
+                <li>Ajouter des commandes et les associer à des serveurs.</li>
+                <li>Voir les commandes en temps réel.</li>
+            </ul>
+            <h2>Calcul des salaires</h2>
+            <ul>
+                <li>Calculez automatiquement les salaires selon les ventes et les grades.</li>
+            </ul>
+        </div>
+
+        <!-- Section Accueil -->
+        <div id="home" class="section active">
+            <h1>Bienvenue dans le gestionnaire du Bar RP</h1>
+            <p>Choisissez une section pour commencer.</p>
+        </div>
     </div>
 
     <script>
-        function showPage(page) {
-            const content = document.getElementById('content');
-            if (page === 'admin') {
-                content.innerHTML = `
-                    <h1>Interface Admin</h1>
-                    <p>Gérez les serveurs et les produits ici.</p>
-                `;
-            } else if (page === 'user') {
-                content.innerHTML = `
-                    <h1>Interface Utilisateur</h1>
-                    <p>Enregistrez les commandes et calculez les salaires ici.</p>
-                `;
+        function showSection(sectionId) {
+            // Masquer toutes les sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Afficher la section sélectionnée
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.classList.add('active');
             }
         }
     </script>
