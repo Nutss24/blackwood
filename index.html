@@ -3,36 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bar RP - Gestion des Commandes</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Bar RP - Gestion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
+    <nav>
+        <a href="#" onclick="showPage('admin')">Interface Admin</a>
+        <a href="#" onclick="showPage('user')">Interface Utilisateur</a>
+    </nav>
+    <div class="container" id="content">
+        <h1>Bienvenue dans le gestionnaire du Bar RP</h1>
+        <p>Choisissez une section pour commencer.</p>
+    </div>
 
-    <header>
-        <h1>Gestion du Bar RP</h1>
-    </header>
-
-    <main>
-        <section class="products">
-            <h2>Produits Disponibles</h2>
-            <div class="product-list" id="productList">
-                <!-- Les produits seront chargés ici via JavaScript -->
-            </div>
-        </section>
-
-        <section class="cart">
-            <h2>Panier</h2>
-            <ul id="cartList">
-                <!-- Les produits ajoutés au panier seront affichés ici -->
-            </ul>
-            <button id="checkoutButton">Commander</button>
-        </section>
-    </main>
-
-    <footer>
-        <p>© 2025 Bar RP - Tous droits réservés.</p>
-    </footer>
-
-    <script src="script.js"></script>
+    <script>
+        function showPage(page) {
+            const content = document.getElementById('content');
+            if (page === 'admin') {
+                content.innerHTML = `
+                    <h1>Interface Admin</h1>
+                    <p>Gérez les serveurs et les produits ici.</p>
+                `;
+            } else if (page === 'user') {
+                content.innerHTML = `
+                    <h1>Interface Utilisateur</h1>
+                    <p>Enregistrez les commandes et calculez les salaires ici.</p>
+                `;
+            }
+        }
+    </script>
 </body>
 </html>
